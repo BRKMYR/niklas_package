@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/niklas/catkin_ws/src/niklas_package/src/devel/setup.sh

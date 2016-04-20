@@ -1,0 +1,56 @@
+#include <string>
+#include <iostream>
+ 
+#include <ros/ros.h>
+#include <json_prolog/prolog.h>
+ 
+using namespace std;
+using namespace json_prolog;
+ 
+int main(int argc, char *argv[])
+{
+  ros::init(argc, argv, "test_json_prolog");
+ 
+  Prolog pl;
+ 
+  // We have created the computable "detectObject(?Obj, Material, Shape, Affordance)", which retreives the
+  // right object. 
+
+  //This computable is called trough its property "aboveOfTable"
+  //PrologQueryProxy bdgs = pl.query("rdf_triple(knowrob:'aboveOfTable',A, B)");
+ 
+  String Material_str = 'Ceramic',
+  String Shape_str = 'Round', 
+  String Affordance_str = 'DrinkingEvent'.
+
+
+  PrologQueryProxy bdgs = pl.query("rdf_assert(A, niklas:hasObjectMaterialType, niklas:'Ceramic'), rdf_assert(A, niklas:hasObjectShapeType, niklas:'Round'), rdf_assert(A, niklas:hasObjectUsedFor, niklas:'EatingEvent').");
+ 
+
+  for(PrologQueryProxy::iterator it=bdgs.begin(); it != bdgs.end(); it++)
+  {
+    PrologBindings bdg = *it;
+    cout << "Found solution: " << (bool)(it == bdgs.end()) << endl;
+    cout << "A = " << bdg["A"] << endl;
+    //cout << "B = " << bdg["B"] << endl;
+    //cout << "C = " << bdg["C"] << endl;
+  }
+
+  /*
+  //Assert new information into the knowledge base
+  pl.query("rdf_assert( semRoom_semantic_map:cup2, knowrob:'aboveOfTable','0.80')");
+  pl.query("rdf_assert( semRoom_semantic_map:plate2, knowrob:'aboveOfTable','0.85')");
+  PrologQueryProxy bdgs__assert_answer = pl.query("rdf_triple(knowrob:'aboveOfTable',Obj, Zval)");
+  std::cout<<"I will print the data including the assertions: "<<std::endl;
+  for(PrologQueryProxy::iterator it=bdgs__assert_answer.begin(); it != bdgs__assert_answer.end(); it++)
+  {
+    PrologBindings bdg_assert = *it;
+    cout << "Found solution: " << (bool)(it == bdgs__assert_answer.end()) << endl;
+    cout << "Obj = "<< bdg_assert["Obj"] << endl;
+    cout << "Zval = " << bdg_assert["Zval"] << endl;
+
+  }
+  */
+
+  return 0;
+}

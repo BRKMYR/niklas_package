@@ -1,0 +1,8 @@
+prefix=/home/niklas/catkin_ws/src/niklas_package/src/devel
+
+Name: niklas_package
+Description: Description of niklas_package
+Version: 0.0.0
+Cflags: -I/home/niklas/catkin_ws/src/niklas_package/include
+Libs: -L/home/niklas/catkin_ws/src/niklas_package/src/devel/lib 
+Requires: json_prolog knowrob_actions knowrob_map_data knowrob_map_tools roscpp rosjava_bootstrap rosjava_build_tools rosjava_messages rospy std_msgs

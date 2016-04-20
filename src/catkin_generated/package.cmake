@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "niklas_package")
+set(niklas_package_MAINTAINER "niklas <niklas@todo.todo>")
+set(niklas_package_DEPRECATED "")
+set(niklas_package_VERSION "0.0.0")
+set(niklas_package_BUILD_DEPENDS "json_prolog" "knowrob_actions" "knowrob_map_data" "knowrob_map_tools" "message_generation" "roscpp" "rosjava_bootstrap" "rosjava_build_tools" "rosjava_messages" "rospy" "std_msgs")
+set(niklas_package_RUN_DEPENDS "json_prolog" "knowrob_actions" "knowrob_map_data" "knowrob_map_tools" "roscpp" "rosjava_bootstrap" "rosjava_build_tools" "rosjava_messages" "rospy" "std_msgs")
+set(niklas_package_BUILDTOOL_DEPENDS "catkin")

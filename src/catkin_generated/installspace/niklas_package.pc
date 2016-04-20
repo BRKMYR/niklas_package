@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: niklas_package
+Description: Description of niklas_package
+Version: 0.0.0
+Cflags: -I/usr/local/include
+Libs: -L/usr/local/lib 
+Requires: json_prolog knowrob_actions knowrob_map_data knowrob_map_tools roscpp rosjava_bootstrap rosjava_build_tools rosjava_messages rospy std_msgs
