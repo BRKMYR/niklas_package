@@ -74,26 +74,7 @@ int main(int argc, char *argv[])
 		cout <<"Shape is: " + Shape_ << endl;
 		cout <<"Affordance is: " + Affordance_ << endl;
 
-		for(PrologQueryProxy::iterator it=bdgs.begin(); it != bdgs.end(); it++)
-  		{
-    			PrologBindings bdg = *it;
-    			cout << "Found solution: " << (bool)(it == bdgs.end()) << endl;
-		    	cout << "A = " << bdg["A"] << endl;
-    			//cout << "B = " << bdg["B"] << endl;
-    			//cout << "C = " << bdg["C"] << endl;
-		}
-        } /*else {
-			
-		// Test: Properties for Plate
-  		string Material_ = "Ceramic";
-  		string Shape_ = "Round"; 
-  		string Affordance_ = "EatingEvent";
-  		string query_m;
-		query_m = "rdf_assert(A, niklas:hasObjectMaterialType, niklas:'"+ Material_ +"'), rdf_assert(A, niklas:hasObjectShapeType, niklas:'"+ Shape_ +"'), rdf_assert(A, niklas:hasObjectUsedFor, niklas:'" + Affordance_ + "').";  
-
-		cout << "Receiving less than 4 inputs... Properties for Plate will be used." << endl;
-
-		PrologQueryProxy bdgs = pl.query(query_m);
+		int found_sol=0;
 		
 		for(PrologQueryProxy::iterator it=bdgs.begin(); it != bdgs.end(); it++)
   		{
@@ -102,29 +83,64 @@ int main(int argc, char *argv[])
 		    	cout << "A = " << bdg["A"] << endl;
     			//cout << "B = " << bdg["B"] << endl;
     			//cout << "C = " << bdg["C"] << endl;
+			found_sol=1;
 		}
 
-	}*/
+		if(found_sol==0){
+			
+			string bool_learn_object, Object_, bool_material, bool_shape, bool_affordance;
+			cout << "No solution found. Do you want to learn the new object? (yes/no)" << endl;
+			getline(cin, bool_learn_object);
+			
+			if(bool_learn_object == "yes") {
+				cout << "Please write the correct name of the object:" << endl;
+				getline(cin, Object_);
+							
+				cout << "Is Material:"+Material_+" correct? (yes/no)"<< endl;
+				getline(cin, bool_material);
+				if(bool_material=="no"){
+					cout << "Please enter the correct material:"<< endl;
+					getline(cin, Material_);
+				}
+			
+				cout << "Is Shape:"+Shape_+" correct? (yes/no)" << endl;
+				getline(cin, bool_shape);
+				if(bool_shape=="no"){
+					cout << "Please enter the correct shape:"<< endl;
+					getline(cin, Shape_);
+				}
+				
+				cout << "Is Affordance:"+Affordance_+" correct? (yes/no)" << endl;
+				getline(cin, bool_affordance);
+				if(bool_affordance=="no"){
+					cout << "Please enter the correct affordance:"<< endl;
+					getline(cin, Affordance_);
+				}			
 
-  
-  // If new object: manual data entry!
+              		 	// If new object: manual data entry!		
+				query_m = "rdf_assert(niklas:'"+ Object_ +"', niklas:'hasObjectMaterialType', niklas:'"+ Material_ +"')";
+				PrologQueryProxy bdgs__assert_1 = pl.query(query_m);
+				query_m = "rdf_assert(niklas:'"+ Object_ +"', niklas:'hasObjectShapeType', niklas:'"+ Shape_ +"')";
+				PrologQueryProxy bdgs__assert_2 = pl.query(query_m);
+				query_m = "rdf_assert(niklas:'"+ Object_ +"', niklas:'hasObjectUsedFor', niklas:'" + Affordance_ + "').";
+				PrologQueryProxy bdgs__assert_3 = pl.query(query_m);
 
+            
+				cout << Object_ +" is being learnt... Starting Prolog query." << endl;
 
-  /*
-  //Assert new information into the knowledge base
-  pl.query("rdf_assert( semRoom_semantic_map:cup2, knowrob:'aboveOfTable','0.80')");
-  pl.query("rdf_assert( semRoom_semantic_map:plate2, knowrob:'aboveOfTable','0.85')");
-  PrologQueryProxy bdgs__assert_answer = pl.query("rdf_triple(knowrob:'aboveOfTable',Obj, Zval)");
-  std::cout<<"I will print the data including the assertions: "<<std::endl;
-  for(PrologQueryProxy::iterator it=bdgs__assert_answer.begin(); it != bdgs__assert_answer.end(); it++)
-  {
-    PrologBindings bdg_assert = *it;
-    cout << "Found solution: " << (bool)(it == bdgs__assert_answer.end()) << endl;
-    cout << "Obj = "<< bdg_assert["Obj"] << endl;
-    cout << "Zval = " << bdg_assert["Zval"] << endl;
+				query_m = "rdf_assert(A, niklas:'hasObjectMaterialType', niklas:'"+ Material_ +"'), rdf_assert(A, niklas:'hasObjectShapeType', niklas:'"+ Shape_ +"'), rdf_assert(A, niklas:'hasObjectUsedFor', niklas:'" + Affordance_ + "').";
+				PrologQueryProxy bdgs__assert_answer = pl.query(query_m);
 
-  }
-  */
+				for(PrologQueryProxy::iterator it=bdgs__assert_answer.begin(); it != bdgs__assert_answer.end(); it++)
+  				{
+    					PrologBindings bdg = *it;
+    					cout << "Found solution: " << (bool)(it == bdgs__assert_answer.end()) << endl;
+				    	cout << "A = " << bdg["A"] << endl;
+    				}
+			}
+		}
+        } 
+
 
   // ENDE WHILE-Schleife
   }
