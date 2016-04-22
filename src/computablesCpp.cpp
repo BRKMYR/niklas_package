@@ -21,6 +21,45 @@ int main(int argc, char *argv[])
  
   Prolog pl;
  
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // TEST to setup KB correctly...
+  // Cup
+  PrologQueryProxy bdgs1 =pl.query("rdf_assert(niklas:'Cup', niklas:'hasObjectMaterialType', niklas:'Ceramic').");
+  PrologQueryProxy bdgs2 =pl.query("rdf_assert(niklas:'Cup', niklas:'hasObjectShapeType', niklas:'Round').");
+  PrologQueryProxy bdgs3 =pl.query("rdf_assert(niklas:'Cup', niklas:'hasObjectUsedFor', niklas:'DrinkingEvent').");
+
+  // DishwashingSoap
+  PrologQueryProxy bdgs4 =pl.query("rdf_assert(niklas:'DishwashingSoap', niklas:'hasObjectMaterialType', niklas:'Plastic').");
+  PrologQueryProxy bdgs5 =pl.query("rdf_assert(niklas:'DishwashingSoap', niklas:'hasObjectShapeType', niklas:'Long').");
+  PrologQueryProxy bdgs6 =pl.query("rdf_assert(niklas:'DishwashingSoap', niklas:'hasObjectUsedFor', niklas:'CleaningEvent').");
+
+  // LaundryDetergent
+  PrologQueryProxy bdgs7 =pl.query("rdf_assert(niklas:'LaundryDetergent', niklas:'hasObjectMaterialType', niklas:'Plastic').");
+  PrologQueryProxy bdgs8 =pl.query("rdf_assert(niklas:'LaundryDetergent', niklas:'hasObjectShapeType', niklas:'Long').");
+  PrologQueryProxy bdgs9 =pl.query("rdf_assert(niklas:'LaundryDetergent', niklas:'hasObjectUsedFor', niklas:'CleaningEvent').");
+
+  // Plate
+  PrologQueryProxy bdgs10 =pl.query("rdf_assert(niklas:'Plate', niklas:'hasObjectMaterialType', niklas:'Ceramic').");
+  PrologQueryProxy bdgs11 =pl.query("rdf_assert(niklas:'Plate', niklas:'hasObjectShapeType', niklas:'Round').");
+  PrologQueryProxy bdgs12 =pl.query("rdf_assert(niklas:'Plate', niklas:'hasObjectUsedFor', niklas:'EatingEvent').");
+
+  // Soap
+  PrologQueryProxy bdgs13 =pl.query("rdf_assert(niklas:'Soap', niklas:'hasObjectMaterialType', niklas:'Clear').");
+  PrologQueryProxy bdgs14 =pl.query("rdf_assert(niklas:'Soap', niklas:'hasObjectShapeType', niklas:'Rectangular').");
+  PrologQueryProxy bdgs15 =pl.query("rdf_assert(niklas:'Soap', niklas:'hasObjectUsedFor', niklas:'CleaningEvent').");
+
+  // Sponge
+  PrologQueryProxy bdgs16 =pl.query("rdf_assert(niklas:'Sponge', niklas:'hasObjectMaterialType', niklas:'Wet').");
+  PrologQueryProxy bdgs17 =pl.query("rdf_assert(niklas:'Sponge', niklas:'hasObjectShapeType', niklas:'Rectangular').");
+  PrologQueryProxy bdgs18 =pl.query("rdf_assert(niklas:'Sponge', niklas:'hasObjectUsedFor', niklas:'CleaningEvent').");
+
+  // Sprayer
+  PrologQueryProxy bdgs19 =pl.query("rdf_assert(niklas:'Sprayer', niklas:'hasObjectMaterialType', niklas:'Plastic').");
+  PrologQueryProxy bdgs20 =pl.query("rdf_assert(niklas:'Sprayer', niklas:'hasObjectShapeType', niklas:'Long').");
+  PrologQueryProxy bdgs21 =pl.query("rdf_assert(niklas:'Sprayer', niklas:'hasObjectUsedFor', niklas:'CleaningEvent').");
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
   Network yarp;
   Network::init();
 
@@ -62,9 +101,11 @@ int main(int argc, char *argv[])
 
 	if((check2 == 1) && (check3 == 1) && (check4 == 1) )  {        
 		
-		// We have created the computable "detectObject(?Obj, Material, Shape, Affordance)", which retreives the right object. 
+		// Retreiving the right object.... 
 		string query_m;
-		query_m = "rdf_assert(A, niklas:hasObjectMaterialType, niklas:'"+ Material_ +"'), rdf_assert(A, niklas:hasObjectShapeType, niklas:'"+ Shape_ +"'), rdf_assert(A, niklas:hasObjectUsedFor, niklas:'" + Affordance_ + "').";  
+		// Currently not working:
+		// query_m = "rdf_assert(A, niklas:hasObjectMaterialType, niklas:'"+ Material_ +"'), rdf_assert(A, niklas:hasObjectShapeType, niklas:'"+ Shape_ +"'), rdf_assert(A, niklas:hasObjectUsedFor, niklas:'" + Affordance_ + "').";
+		query_m = "owl_has(A, niklas:'hasObjectMaterialType', niklas:'"+ Material_ +"'), owl_has(A, niklas:'hasObjectShapeType', niklas:'"+ Shape_ +"'), owl_has(A, niklas:'hasObjectUsedFor', niklas:'" + Affordance_ + "').";
             
 		cout << "Inputs received. Starting Prolog query." << endl;
 
@@ -127,8 +168,10 @@ int main(int argc, char *argv[])
 
             
 				cout << Object_ +" is being learnt... Starting Prolog query." << endl;
+				// Currently not working:
+				//query_m = "rdf_assert(A, niklas:'hasObjectMaterialType', niklas:'"+ Material_ +"'), rdf_assert(A, niklas:'hasObjectShapeType', niklas:'"+ Shape_ +"'), rdf_assert(A, niklas:'hasObjectUsedFor', niklas:'" + Affordance_ + "').";
+				query_m = "owl_has(A, niklas:'hasObjectMaterialType', niklas:'"+ Material_ +"'), owl_has(A, niklas:'hasObjectShapeType', niklas:'"+ Shape_ +"'), owl_has(A, niklas:'hasObjectUsedFor', niklas:'" + Affordance_ + "').";
 
-				query_m = "rdf_assert(A, niklas:'hasObjectMaterialType', niklas:'"+ Material_ +"'), rdf_assert(A, niklas:'hasObjectShapeType', niklas:'"+ Shape_ +"'), rdf_assert(A, niklas:'hasObjectUsedFor', niklas:'" + Affordance_ + "').";
 				PrologQueryProxy bdgs__assert_answer = pl.query(query_m);
 
 				for(PrologQueryProxy::iterator it=bdgs__assert_answer.begin(); it != bdgs__assert_answer.end(); it++)
@@ -137,12 +180,13 @@ int main(int argc, char *argv[])
     					cout << "Found solution: " << (bool)(it == bdgs__assert_answer.end()) << endl;
 				    	cout << "A = " << bdg["A"] << endl;
     				}
+
+				cout << "Exporting object class into OWL-file..." << endl;
+				PrologQueryProxy bdgs__export_class = pl.query("export_object_class(niklas:'"+Object_+"', '/home/niklas/catkin_ws/src/niklas_package/owl/Learned_Objects/"+Object_+"_Class.owl').");
 			}
 		}
         } 
-
-
-  // ENDE WHILE-Schleife
+ 
   }
 
   return 0;
