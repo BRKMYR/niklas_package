@@ -5,30 +5,29 @@ rosrun rosprolog rosprolog niklas_package
 or:
 
 rosrun rosprolog rosprolog knowrob_common
-owl_parse('package://niklas_package/owl/objects_affordances_attributes.owl').
+owl_parse('package://niklas_package/owl/icubworld.owl').
 register_ros_package(niklas_package).
 
 %%%%%%%%%%%
 
-create_instance_from_class('http://knowrob.org/kb/objects_affordances_attributes.owl#Cup', 1,X).
-owl_has(A, rdf:type, niklas:'Cup').
-owl_has(niklas:'Cup_1', P, O).
+create_instance_from_class('http://www.semanticweb.org/niklas/ontologies/2016/3/icubworld.owl#Cup', 1,X).
+owl_has(A, rdf:type, icubworld:'Cup').
+owl_has(icubworld:'Cup_1', P, O).
 
 %% Query
-rdf_assert(niklas:'Cup_1', niklas:hasObjectMaterialType, X).
-rdf_assert(A, niklas:'hasObjectMaterialType', X).
+rdf_assert(icubworld:'Cup_1', icubworld:hasObjectMaterialType, X).
+rdf_assert(A, icubworld:'hasObjectMaterialType', X).
 
 % Integrate new knowledge:
-rdf_assert(niklas:'Plate_1', niklas:'hasObjectMaterialType', niklas:'Ceramic').
-owl_has(A, niklas:hasObjectMaterialType, X).
+rdf_assert(icubworld:'Plate_1', icubworld:'hasObjectMaterialType', icubworld:'Ceramic').
+owl_has(A, icubworld:hasObjectMaterialType, X).
 
-
-owl_has(niklas:'Sprayer_1', P, O).
-rdf_has(niklas:hasObjectMaterialType, rdfs:range, O).
+owl_has(icubworld:'Sprayer_1', P, O).
+rdf_has(icubworld:hasObjectMaterialType, rdfs:range, O).
 
 # Plate QUERY
-rdf_assert(A, niklas:hasObjectMaterialType, niklas:'Ceramic'), rdf_assert(A, niklas:hasObjectShapeType, niklas:'Round'), rdf_assert(A, niklas:hasObjectUsedFor, niklas:'EatingEvent').
-A = niklas:'Plate_1'
+rdf_assert(A, icubworld:hasObjectMaterialType, icubworld:'Ceramic'), rdf_assert(A, icubworld:hasObjectShapeType, icubworld:'Round'), rdf_assert(A, icubworld:hasObjectUsedFor, icubworld:'EatingEvent').
+A = icubworld:'Plate_1'
 
 
 # with computable (not working 100%..):
@@ -43,3 +42,6 @@ niklasComputables_utils:detectObject(A,Material_str, Shape_str, Attribute_str).
 
 roslaunch niklas_package niklas_computables_cpp.launch
 rosrun niklas_package computablesCpp_node
+
+# First query to set definitions:
+definitions:setDefinitions(A,B,C,D,E,F,G,H,I).
